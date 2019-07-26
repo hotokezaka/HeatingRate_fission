@@ -25,7 +25,7 @@ def calc_heating_rate(Mej,vej, Amin,Amax,ffraction,kappa_effs,alpha_max,alpha_mi
     fraction = np.zeros(300)
     for i in range(0,len(ffraction)):
         A = ffraction[1][i]
-        fraction[A] = ffraction[2][i]
+        fraction[A] = float(A)*ffraction[2][i]
     tmpA = 0.0
     for A in range(Amin,Amax+1):
         Xtot+=fraction[A]
@@ -287,7 +287,7 @@ def calc_heating_rate_sf(Mej,vej, Amin,Amax,ffraction,ffission_A,ffission_X,kapp
     fraction = np.zeros(300)
     for i in range(0,len(ffraction)):
         A = ffraction[1][i]
-        fraction[A] = ffraction[2][i]
+        fraction[A] = float(A)*ffraction[2][i]
     tmpA = 0.0
     for A in range(Amin,Amax+1):
         Xtot+=fraction[A]
