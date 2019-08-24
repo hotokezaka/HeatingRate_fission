@@ -2,6 +2,11 @@ import numpy as np
 from numpy import pi
 
 c = 2.99792458e10
+eV = 1.60218e-12
+MeV = 1.0e6*eV
+me = 9.10938356e-28
+e = 4.803204e-10
+mu = 1.66054e-24
 
 kappa_beta = 1.0 #MeV cm^2/g
 kappa_alpha = -0.15
@@ -19,11 +24,21 @@ def calc_ad(E):
 
 #fitting function of stopping power time beta for Xe 0.01-10MeV
 a_kappa = 2.1
-def calc_kappa_beta(E):
-    x = E/0.8
-    tmp = (np.power(x,-0.215*a_kappa)+np.power(x,0.4*a_kappa))
-    ai_kappa = 1./a_kappa
-    return 0.79*np.power(tmp,ai_kappa)
+def calc_kappa_beta(Etmp):
+    E = Etmp*MeV
+    Z = 54.
+    A = 130.
+    Imean =  482.*eV
+    gamma = 1.0+E/(me*c*c)
+    tmp3 = 1.0-1.0/gamma/gamma
+    beta = np.sqrt(tmp3)
+    tmp1 = gamma*gamma*me*beta*beta*c*c*E/Imean/Imean/2.
+    tmp2 = 1./gamma/gamma 
+    tmp = np.log(tmp1)-(2./gamma-1.+beta*beta)*np.log(2)+1.-beta*beta+(1.-1./gamma)*(1.-1./gamma)/8.
+    omegap = np.sqrt(4.*np.pi*1.0e5*e*e/me)
+    tmp_f = np.log(1.123*me*c*c*c*beta*beta*beta/(e*e*omegap))
+
+    return beta*2.*np.pi*Z*np.power(e,4.)*tmp/(me*c*c*beta*beta)/MeV/(A*mu)+ beta*4.*np.pi*np.power(e,4.)*tmp_f/(me*c*c*beta*beta)/MeV/(A*mu)
 
 def calc_kappa_sf(E):
     return 11.*np.power(E,-gam_t_sf)
